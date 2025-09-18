@@ -1,0 +1,19 @@
+{
+  "name": "pm_2025-26",
+  "version": "1.0.0",
+  "description": "Web lectures and labs for the course Web Programming 2025-26",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PetroTopylko/pm_2025-26.git"
+  },
+  "author": "Petro Topylko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PetroTopylko/pm_2025-26/issues"
+  },
+  "homepage": "https://github.com/PetroTopylko/pm_2025-26#readme"
+}
