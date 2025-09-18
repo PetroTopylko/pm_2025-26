@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/PetroTopylko/pm_2025-26/issues"
   },
-  "homepage": "https://github.com/PetroTopylko/pm_2025-26#readme"
+  "homepage": "https://github.com/PetroTopylko/pm_2025-26#readme",
+  "devDependencies": {
+    "gulp": "^5.0.1"
+  }
 }
