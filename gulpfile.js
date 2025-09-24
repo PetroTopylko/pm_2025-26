@@ -1,4 +1,4 @@
-const { src, dest, series, parallel, watch } = require('gulp');
+const {src, dest, series, parallel, watch} = require('gulp');
 const fileInclude = require('gulp-file-include');
 const concat = require('gulp-concat');
 const sass = require('gulp-sass')(require('sass'));
@@ -9,6 +9,10 @@ const imagemin = require('gulp-imagemin');
 const browserSync = require('browser-sync').create();
 
 const paths = {
+    bootstrapCSS: 'node_modules/bootstrap/dist/css/bootstrap.min.css',
+    distBootstrapCSS: 'dist/css',
+    bootstrapJS: 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
+    distBootstrapJS: 'dist/js',
     html: 'src/app/index.html',
     htmlWatch: 'src/app/**/*.html',
     scss: 'src/app/scss/**/*.scss',
@@ -20,38 +24,46 @@ const paths = {
     distImgs: 'dist/imgs'
 };
 
-// --- Build tasks (with BrowserSync where possible) ---
+// --- Build tasks ---
 
-function html_task() {
-    return src(paths.html)
-        .pipe(fileInclude({ prefix: '@@', basepath: '@file' }))
-        .pipe(dest(paths.dist))
-        .pipe(browserSync.stream());
+const bootstrapCSS = () => {
+    return src(paths.bootstrapCSS)
+        .pipe(dest(paths.distBootstrapCSS));
 }
 
-function scss_task() {
+const bootstrapJS = () => {
+    return src(paths.bootstrapJS)
+        .pipe(dest(paths.distBootstrapJS));
+}
+
+const html_task = () => {
+    return src(paths.html)
+        .pipe(fileInclude({prefix: '@@', basepath: '@file'}))
+        .pipe(dest(paths.dist));
+}
+
+const scss_task = () => {
     return src(paths.scss)
         .pipe(concat('index.scss'))
         .pipe(sass().on('error', sass.logError))
         .pipe(cssnano())
-        .pipe(rename({ suffix: '.min', extname: '.css' }))
+        .pipe(rename({suffix: '.min', extname: '.css'}))
         .pipe(dest(paths.distCss))
-        .pipe(browserSync.stream());
 }
 
-function js_task() {
+const js_task = () => {
     return src(paths.js)
         .pipe(concat('index.js'))
         .pipe(uglify())
-        .pipe(rename({ suffix: '.min' }))
+        .pipe(rename({suffix: '.min'}))
         .pipe(dest(paths.distJs));
 }
 
-function imgs_task() {
+const imgs_task = () => {
     return src(paths.imgs)
         .pipe(imagemin({
             progressive: true,
-            svgoPlugins: [{ removeViewBox: false }],
+            svgoPlugins: [{removeViewBox: false}],
             interlaced: true
         }))
         .pipe(dest(paths.distImgs));
@@ -59,30 +71,34 @@ function imgs_task() {
 
 // --- Dev server & reload ---
 
-function serve_task(done) {
+const serve_task = (done) => {
     browserSync.init({
-        server: { baseDir: paths.dist },
+        server: {baseDir: paths.dist},
         open: true,
         notify: false
     });
     done();
 }
 
-function reload(done) {
+const reload = (done) => {
     browserSync.reload();
     done();
 }
 
 // --- Watch: inject or reload as needed ---
 
-function watch_task() {
-    watch(paths.htmlWatch, html_task);
-    watch(paths.scss, scss_task);
+const watch_task = () => {
+    watch(paths.htmlWatch, series(html_task, reload));
+    watch(paths.scss, series(scss_task, reload));
     watch(paths.js, series(js_task, reload));
     watch(paths.imgs, series(imgs_task, reload));
 }
 
-const build = series(html_task, parallel(scss_task, js_task, imgs_task));
+const build = series(
+    html_task,
+    series(bootstrapCSS, bootstrapJS),
+    parallel(scss_task, js_task, imgs_task)
+);
 
 exports.build = build;
 exports.default = series(build, serve_task, watch_task);

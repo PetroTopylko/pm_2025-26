@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/PetroTopylko/pm_2025-26#readme",
   "devDependencies": {
+    "bootstrap": "^5.3.8",
     "browser-sync": "^3.0.4",
     "gulp": "^5.0.1",
     "gulp-concat": "^2.6.1",
