@@ -1,4 +1,4 @@
-const {src, dest, series, parallel, watch} = require('gulp');
+const {src, dest, series, watch} = require('gulp');
 const fileInclude = require('gulp-file-include');
 const concat = require('gulp-concat');
 const sass = require('gulp-sass')(require('sass'));
@@ -60,7 +60,7 @@ const js_task = () => {
 }
 
 const imgs_task = () => {
-    return src(paths.imgs)
+    return src(paths.imgs, {encoding: false})
         .pipe(imagemin({
             progressive: true,
             svgoPlugins: [{removeViewBox: false}],
@@ -96,9 +96,7 @@ const watch_task = () => {
 
 const build = series(
     html_task,
-    series(bootstrapCSS, bootstrapJS),
-    parallel(scss_task, js_task, imgs_task)
+    series(bootstrapCSS, bootstrapJS, scss_task, js_task, imgs_task)
 );
 
-exports.build = build;
 exports.default = series(build, serve_task, watch_task);
