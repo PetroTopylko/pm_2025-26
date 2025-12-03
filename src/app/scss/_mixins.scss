@@ -1,0 +1,21 @@
+@mixin center-align {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin button($bg-color, $text-color) {
+  background-color: $bg-color;
+  color: $text-color;
+  padding: 10px 15px;
+}
+
+@mixin responsive-text($size) {
+  @if $size == xl {
+    font-size: 16px;
+  } @else if $size == lg {
+    font-size: 20px;
+  } @else {
+    font-size: 24px;
+  }
+}

@@ -15,7 +15,8 @@ const paths = {
     distBootstrapJS: 'dist/js',
     html: 'src/app/index.html',
     htmlWatch: 'src/app/**/*.html',
-    scss: 'src/app/scss/**/*.scss',
+    scss: 'src/app/scss/index.scss',
+    scssWatch: 'src/app/**/*.scss',
     js: 'src/app/js/**/*.js',
     imgs: 'src/app/imgs/**/*.+(jpg|jpeg|png|gif|svg)',
     dist: 'dist',
@@ -89,14 +90,11 @@ const reload = (done) => {
 
 const watch_task = () => {
     watch(paths.htmlWatch, series(html_task, reload));
-    watch(paths.scss, series(scss_task, reload));
+    watch(paths.scssWatch, series(scss_task, reload));
     watch(paths.js, series(js_task, reload));
     watch(paths.imgs, series(imgs_task, reload));
 }
 
-const build = series(
-    html_task,
-    series(bootstrapCSS, bootstrapJS, scss_task, js_task, imgs_task)
-);
+const build = series(html_task, bootstrapCSS, bootstrapJS, scss_task, js_task, imgs_task);
 
 exports.default = series(build, serve_task, watch_task);

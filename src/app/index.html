@@ -9,14 +9,26 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-5">
-            @@include('components/sidebar.html')
+        <div class="col">
+            @@include('components/header/header.html')
         </div>
-        <div class="col-7">
-            @@include('components/main-content.html')
+    </div>
+    <div class="row">
+        <div class="col-4">
+            @@include('components/sidebar/sidebar.html')
+        </div>
+        <div class="col-8">
+            @@include('components/main-content/main-content.html')
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            @@include('components/footer/footer.html')
         </div>
     </div>
 </div>
+
+
 <script src="js/bootstrap.bundle.min.js" defer></script>
 <script src="js/index.min.js" defer></script>
 </body>
