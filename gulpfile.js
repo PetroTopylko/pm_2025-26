@@ -19,10 +19,12 @@ const paths = {
     scssWatch: 'src/app/**/*.scss',
     js: 'src/app/js/**/*.js',
     imgs: 'src/app/imgs/**/*.+(jpg|jpeg|png|gif|svg)',
+    dataWatch: 'src/assets/data.json',
     dist: 'dist',
     distCss: 'dist/css',
     distJs: 'dist/js',
-    distImgs: 'dist/imgs'
+    distImgs: 'dist/imgs',
+    distData: 'dist/data',
 };
 
 // --- Build tasks ---
@@ -70,6 +72,11 @@ const imgs_task = () => {
         .pipe(dest(paths.distImgs));
 }
 
+const data = () => {
+    return src(paths.dataWatch)
+        .pipe(dest(paths.distData));
+}
+
 // --- Dev server & reload ---
 
 const serve_task = (done) => {
@@ -93,8 +100,9 @@ const watch_task = () => {
     watch(paths.scssWatch, series(scss_task, reload));
     watch(paths.js, series(js_task, reload));
     watch(paths.imgs, series(imgs_task, reload));
+    watch(paths.dataWatch, series(data, reload));
 }
 
-const build = series(html_task, bootstrapCSS, bootstrapJS, scss_task, js_task, imgs_task);
+const build = series(html_task, bootstrapCSS, bootstrapJS, scss_task, js_task, imgs_task, data);
 
 exports.default = series(build, serve_task, watch_task);
